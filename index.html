@@ -99,7 +99,6 @@ h1,h2{font-family:var(--serif);font-weight:400;line-height:1}
 .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
 .gal img{width:100%;aspect-ratio:9/16;object-fit:cover;object-position:top;cursor:zoom-in;border:1px solid var(--line);transition:.3s}
 .gal img:hover{border-color:var(--blue)}
-#gaveta .legs{font-size:14px;line-height:1.6;color:var(--mut);letter-spacing:0;text-transform:none;font-family:var(--sans)}
 #zoom{position:fixed;inset:0;z-index:80;background:#000e;display:none;place-items:center;cursor:zoom-out}
 #zoom.on{display:grid} #zoom img{max-height:94vh;max-width:94vw}
 /* ---- ATO 4 ---- */
@@ -373,8 +372,7 @@ function desenharFios(){
 const revelada=i=>i===0||ex.has(i-1)||ex.has(i); // revela em sequência
 function abrir(i){ const p=PROVAS[i], g=$('#gaveta'); bip(260);
   let extra='';
-  if(p.galeria) extra=`<div class="gal">${CONFIG.prints.map((x,k)=>`<img src="${x.src}" data-k="${k}" alt="${x.quem}: ${x.leg}" loading="lazy">`).join('')}</div>
-   <p class="legs">${CONFIG.prints.map(x=>'<b>'+x.quem.split(' ')[0]+':</b> '+x.leg).join('<br>')}</p>`;
+  if(p.galeria) extra=`<div class="gal">${CONFIG.prints.map((x,k)=>`<img src="${x.src}" data-k="${k}" alt="${x.quem}: ${x.leg}" loading="lazy">`).join('')}</div>`;
   if(p.video) extra=`<p class="mono">Alexia Del Papa: trecho</p><p>${CONFIG.videos[0].trecho}</p><p class="mono">Karoline Lima: trecho</p><p>${CONFIG.videos[1].trecho}</p>`;
   g.innerHTML=`<button class="mono" onclick="document.getElementById('gaveta').classList.remove('on')">fechar ✕</button>
    <p class="mono red" style="margin-top:14px">Prova ${p.n}</p><h3>${p.t}</h3>${p.tags.map(t=>`<span class="tg ${t[0]}">${t[1]}</span>`).join('')}
