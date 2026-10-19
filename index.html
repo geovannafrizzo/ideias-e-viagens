@@ -10,8 +10,8 @@
  1) Este HTML fica na MESMA pasta que a pasta "midia".
  2) Vídeos/prints: objeto CONFIG (no <script>).
  3) Textos das provas: array PROVAS.   4) Cores: variáveis em :root.
- 5) Falas dos vídeos: CONFIG.videos[].trecho (escreva a fala EXATA).
- 6) Referências: array REFS.   Atalhos: setas ← → navegam; M liga/desliga som.
+ 5) Falas dos vídeos: CONFIG.videos[].trecho.
+ 6) Referências: array REFS.   Atalhos: setas ← → navegam.
 =====================================================================
 -->
 <style>
@@ -57,7 +57,6 @@ h1,h2{font-family:var(--serif);font-weight:400;line-height:1}
 .intro{max-width:760px;font-size:clamp(16px,1.4vw,20px);line-height:1.6;color:var(--soft);margin:0 0 28px}
 .vids{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,3vw,48px);align-items:start;max-width:1200px;margin:0 auto}
 .vid{border:1px solid var(--line);background:var(--graf);padding:16px;transition:.6s}
-.vid:nth-child(2){margin-top:60px}
 .vid video{width:100%;max-height:52vh;background:#000;display:block;object-fit:contain}
 .vid .nm{font-family:var(--serif);font-size:clamp(22px,2.4vw,34px);margin:12px 0 6px;color:var(--txt)}
 .vid p{font-size:clamp(14px,1.2vw,17px);color:var(--soft);line-height:1.6}
@@ -115,8 +114,6 @@ h1,h2{font-family:var(--serif);font-weight:400;line-height:1}
 .dossie b{color:var(--txt)}
 .nota{display:block;border-left:3px solid var(--blue);padding-left:14px;margin:12px 0;opacity:.15;transition:opacity .7s;color:var(--txt)}
 .nota.v{opacity:1}
-details{margin-top:16px;font-size:15px;color:var(--soft)} summary{cursor:pointer;color:var(--blue)}
-details li{margin:8px 0 0 18px;line-height:1.6}
 /* ---- ATO 5 ---- */
 .jur{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,28px);max-width:1250px;margin:26px auto}
 .op{padding:clamp(16px,2vw,28px);background:var(--graf);border:1px solid var(--line);text-align:left;min-height:220px;transition:.4s}
@@ -141,7 +138,7 @@ details li{margin:8px 0 0 18px;line-height:1.6}
 #cort.f{transform:none}
 #refs{position:fixed;inset:0 0 56px 0;z-index:45;background:#0b0c0efa;padding:clamp(18px,4vw,56px);overflow:auto;display:none}
 #refs.on{display:block} #refs li{margin:14px 0 0 20px;line-height:1.6;max-width:900px;font-size:17px;color:var(--soft)}
-@media(max-width:800px){.vids,.teo,.jur{grid-template-columns:1fr}.vid:nth-child(2),.op:nth-child(2){margin-top:0}.hud{max-width:90vw}}
+@media(max-width:800px){.vids,.teo,.jur{grid-template-columns:1fr}.op:nth-child(2){margin-top:0}.hud{max-width:90vw}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -224,7 +221,6 @@ details li{margin:8px 0 0 18px;line-height:1.6}
 <nav id="bar">
  <button id="prev" aria-label="Voltar">← Voltar</button>
  <div id="dots"></div>
- <button id="som" aria-pressed="false">Som: off</button>
  <button id="rf">Refs</button>
  <button id="next" class="btn" style="padding:8px 18px">Avançar →</button>
 </nav>
@@ -232,16 +228,14 @@ details li{margin:8px 0 0 18px;line-height:1.6}
 <script>
 /* =====================================================================
    CONFIG — EDITE AQUI
-   Caminhos relativos à pasta do HTML. "trecho" = fala exata (preencha você).
+   Caminhos relativos à pasta do HTML.
    ===================================================================== */
 const CONFIG = {
   videos: [
     { src:"midia/video-alexia.mp4", quem:"Alexia Del Papa",
-      contexto:"Stories gravados em vídeo, exibidos na tela de um celular. No começo aparece um post de outra pessoa (@lizzieyozng) dizendo que ela “acha que internet não influencia”. Atenção: essa frase é de terceiros, não é fala da Alexia.",
-      trecho:"[EDITAR: escreva aqui, entre aspas, a fala exata da Alexia.]" },
+      trecho:"“Gente, vocês conhecem alguém que já mudou o seu posicionamento político em uma conversa? Em um post? Em um stories? Eu não conheço. [...] O meu perfil é normal. [...] Eu não tenho todo esse poder, gente.”" },
     { src:"midia/video-karoline.mp4", quem:"Karoline Lima",
-      contexto:"Vídeo vertical com marca d’água do TikTok (repostado por outro perfil) e legenda na tela com “sobre política”. [CONFIRMAR: data e contexto original do vídeo.]",
-      trecho:"[EDITAR: escreva aqui, entre aspas, a fala exata do vídeo.]" }
+      trecho:"“Acho erradíssimo cobrar posicionamento de influenciador, porque tem muita gente que eu sigo aqui porque eu acho o conteúdo engraçado, porque eu acho inteligente. [...]”" }
   ],
   prints: [ // ordem = galeria da Prova 02
     { src:"midia/print-1-karoline.jpg", quem:"Karoline Lima", leg:"Publicação com @nestlemucilon, marcada #publicidade (23 de setembro)." },
@@ -290,10 +284,9 @@ const TEORIA={
        ["Prova 04","o vídeo é o meio: tom, plataforma e alcance mudam como a fala é recebida, mesmo quando a pessoa diz que não influencia."]]}
 };
 const REFS=[
- "BOURDIEU, Pierre. <i>O poder simbólico</i>. Tradução de Fernando Tomaz. Rio de Janeiro: Bertrand Brasil. [CONFERIR edição/ano na sua biblioteca.]",
- "MCLUHAN, Marshall. <i>Os meios de comunicação como extensões do homem (Understanding Media)</i>. Tradução de Décio Pignatari. São Paulo: Cultrix. [CONFERIR edição/ano.]",
- "Materiais do caso: vídeos e prints fornecidos pelo grupo (perfis públicos @karolinel e @alexiadelpapa). [ADICIONAR links e datas de acesso.]",
- "[ADICIONAR outras referências da disciplina Posicionamento em Ambiente Digital.]"
+ "BOURDIEU, Pierre. <i>O poder simbólico</i>. Rio de Janeiro: Bertrand Brasil.",
+ "MCLUHAN, Marshall. <i>Os meios de comunicação como extensões do homem</i>. São Paulo: Cultrix.",
+ "Vídeos e prints de perfis públicos (Instagram e TikTok): @alexiadelpapa e @karolinel."
 ];
 const OPCOES=[
  {k:"A",t:"Existe contradição",d:"Elas usam o poder de influenciar para vender e negam esse poder quando o assunto é política.",s:"Argumento: se a influência sustenta o negócio, negá-la só em um assunto parece conveniente."},
@@ -306,10 +299,7 @@ const OPCOES=[
    ===================================================================== */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const atos=$$('.ato'); let cur=0, seen=[false,false], ex=new Set(), lente='b', escolha=null;
-let sonOn=false, ac=null;
-function bip(f=220,d=.12,v=.05){ if(!sonOn)return; try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();
-  const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;o.type='sine';g.gain.value=v;o.connect(g);g.connect(ac.destination);
-  o.start();g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.stop(ac.currentTime+d);}catch(e){} }
+function bip(){} // sem som
 
 /* progresso */
 $('#dots').innerHTML=atos.map(()=>'<i></i>').join('');
@@ -320,17 +310,15 @@ function liberado(){ // regras para avançar
   return true; }
 function go(n){
   if(n<0||n>5||n===cur&&atos[n].classList.contains('on'))return;
-  if(n>cur&&!liberado()){ bip(120,.2); $('#next').animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:250}); return;}
+  if(n>cur&&!liberado()){ $('#next').animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:250}); return;}
   const old=atos[cur]; old.classList.remove('on'); old.classList.add('out'); setTimeout(()=>old.classList.remove('out'),500);
-  cur=n; setTimeout(()=>{atos[cur].classList.add('on'); entrar(cur);},420); bip(300+n*60,.2);
+  cur=n; setTimeout(()=>{atos[cur].classList.add('on'); entrar(cur);},420);
   $$('#dots i').forEach((d,i)=>d.className=i<cur?'d':i===cur?'c':'');
   $('#prev').style.visibility=cur?'visible':'hidden'; $('#next').style.visibility=cur<5?'visible':'hidden';
   $('#gaveta').classList.remove('on'); }
 $('#prev').onclick=()=>go(cur-1); $('#next').onclick=()=>go(cur+1);
 document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight')go(cur+1); if(e.key==='ArrowLeft')go(cur-1);
-  if(e.key==='Escape'){$('#gaveta').classList.remove('on');$('#refs').classList.remove('on');$('#zoom').classList.remove('on');}
-  if(e.key.toLowerCase()==='m')$('#som').click(); });
-$('#som').onclick=e=>{sonOn=!sonOn;e.target.textContent='Som: '+(sonOn?'on':'off');e.target.setAttribute('aria-pressed',sonOn);bip(440);};
+  if(e.key==='Escape'){$('#gaveta').classList.remove('on');$('#refs').classList.remove('on');$('#zoom').classList.remove('on');} });
 function entrar(i){ if(i===5)veredito(); if(i===4)renderRes(false); if(i===2)desenharFios(); }
 
 /* ATO 1 */
@@ -343,17 +331,17 @@ $('#vids').innerHTML=CONFIG.videos.map((v,i)=>`<div class="vid" id="v${i}">
   <p class="mono blue">Material ${i+1}</p>
   <video controls playsinline preload="metadata" src="${v.src}"></video>
   <div class="ph">Não foi possível carregar o vídeo: ${v.src}<br>Confira se o arquivo está na pasta indicada em CONFIG.</div>
-  <p class="nm">${v.quem}</p><p>${v.contexto}</p>
-  <p style="margin-top:10px;color:var(--txt);font-family:var(--serif);font-style:italic">${v.trecho}</p></div>`).join('');
+  <p class="nm">${v.quem}</p>
+  <p style="margin-top:6px;color:var(--txt);font-family:var(--serif);font-style:italic">${v.trecho}</p></div>`).join('');
 $$('.vid video').forEach((vd,i)=>{
   vd.addEventListener('error',()=>{vd.style.display='none';vd.nextElementSibling.style.display='block';seen[i]=true;check();});
-  vd.addEventListener('timeupdate',()=>{ if(vd.duration&&vd.currentTime/vd.duration>.8&&!seen[i]){seen[i]=true;$('#v'+i).classList.add('seen');bip(520);check();} });
+  vd.addEventListener('timeupdate',()=>{ if(vd.duration&&vd.currentTime/vd.duration>.8&&!seen[i]){seen[i]=true;$('#v'+i).classList.add('seen');check();} });
 });
 function check(){ if(seen[0]&&seen[1]&&!$('#perg').innerHTML){
   $('#aviso').textContent='Silêncio. Observe.';
   $('#perg').innerHTML=PERGUNTA.map(p=>`<span>${p}</span>`).join('');
   const sp=$$('#perg span'); sp[0].classList.add('v');
-  setTimeout(()=>{sp[1].classList.add('v');bip(180,.6);$('#aviso').textContent='Os autos estão prontos. Avance para a investigação.';},2800);} }
+  setTimeout(()=>{sp[1].classList.add('v');$('#aviso').textContent='Os autos estão prontos. Avance para a investigação.';},2800);} }
 
 /* ATO 3 */
 const mural=$('#mural');
@@ -365,12 +353,12 @@ function desenharFios(){
   $('#fios').innerHTML=LIGA.map(([a,b])=>{ const A=PROVAS[a],B=PROVAS[b]; const on=(ex.has(a)||a===0)&&revelada(b);
    return on?`<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}"/>`:''}).join('');
   PROVAS.forEach((p,i)=>{const n=$('#n'+i); const r=revelada(i);
-    if(r&&n.classList.contains('lock')){n.classList.remove('lock');n.classList.add('novo');bip(400+i*50);}
+    if(r&&n.classList.contains('lock')){n.classList.remove('lock');n.classList.add('novo');}
     n.classList.toggle('ex',ex.has(i)); n.querySelector('.st').textContent=ex.has(i)?'EXAMINADA':r?'EM ANÁLISE':'BLOQUEADA'; });
   $('#cont').textContent=ex.size+' / 5 examinadas';
   $('#tl').innerHTML=PROVAS.map((p,i)=>`<u class="${ex.has(i)?'f':''}" title="Prova ${p.n}"></u>${i<4?`<i class="${ex.has(i)?'f':''}"></i>`:''}`).join(''); }
 const revelada=i=>i===0||ex.has(i-1)||ex.has(i); // revela em sequência
-function abrir(i){ const p=PROVAS[i], g=$('#gaveta'); bip(260);
+function abrir(i){ const p=PROVAS[i], g=$('#gaveta');
   let extra='';
   if(p.galeria) extra=`<div class="gal">${CONFIG.prints.map((x,k)=>`<img src="${x.src}" data-k="${k}" alt="${x.quem}: ${x.leg}" loading="lazy">`).join('')}</div>`;
   if(p.video) extra=`<p class="mono">Alexia Del Papa: trecho</p><p>${CONFIG.videos[0].trecho}</p><p class="mono">Karoline Lima: trecho</p><p>${CONFIG.videos[1].trecho}</p>`;
@@ -380,16 +368,15 @@ function abrir(i){ const p=PROVAS[i], g=$('#gaveta'); bip(260);
    <button class="btn" style="margin-top:10px;font-size:12px" id="mk">${ex.has(i)?'Já examinada ✓':'Marcar como examinada'}</button>`;
   g.classList.add('on');
   $$('.gal img').forEach(im=>im.onclick=()=>{$('#zoom img').src=im.src;$('#zoom').classList.add('on');});
-  $('#mk').onclick=()=>{ex.add(i);desenharFios();abrir(i);bip(600,.2); if(ex.size===5)$('#cont').textContent='5 / 5 — autos completos. Avance.';}; }
+  $('#mk').onclick=()=>{ex.add(i);desenharFios();abrir(i); if(ex.size===5)$('#cont').textContent='5 / 5 — autos completos. Avance.';}; }
 $('#zoom').onclick=()=>$('#zoom').classList.remove('on');
 
 /* ATO 4 */
 function teoria(){ const T=TEORIA[lente];
   $('#dos').innerHTML=`<p class="tit">Sobre o autor</p><p><b>${T.t}</b></p>${T.p.map(x=>`<p>${x}</p>`).join('')}
-   <p class="tit">O que isso muda nas provas</p>${T.n.map(n=>`<span class="nota"><b>${n[0]}:</b> ${n[1]}</span>`).join('')}
-   <details><summary>O que a teoria não diz</summary><ul><li>Não afirma que o autor analisou estas influenciadoras.</li><li>Não prova que houve contradição: oferece uma forma de interpretar.</li></ul></details>`;
+   <p class="tit">O que isso muda nas provas</p>${T.n.map(n=>`<span class="nota"><b>${n[0]}:</b> ${n[1]}</span>`).join('')}`;
   $$('.nota').forEach((n,i)=>setTimeout(()=>n.classList.add('v'),400+i*600)); }
-$$('.lentes button').forEach(b=>b.onclick=()=>{lente=b.dataset.l;$$('.lentes button').forEach(x=>x.classList.toggle('on',x===b));teoria();bip(350);});
+$$('.lentes button').forEach(b=>b.onclick=()=>{lente=b.dataset.l;$$('.lentes button').forEach(x=>x.classList.toggle('on',x===b));teoria();});
 teoria();
 $('#reflist').innerHTML=REFS.map(r=>`<li>${r}</li>`).join('');
 const verRefs=()=>$('#refs').classList.add('on'); $('#vrefs').onclick=verRefs; $('#rf').onclick=verRefs; $('#fechar').onclick=()=>$('#refs').classList.remove('on');
@@ -398,9 +385,9 @@ const verRefs=()=>$('#refs').classList.add('on'); $('#vrefs').onclick=verRefs; $
 let urna={A:0,B:0,C:0}; try{urna=JSON.parse(localStorage.getItem('tdi_urna'))||urna}catch(e){}
 const tot=()=>urna.A+urna.B+urna.C;
 $('#jur').innerHTML=OPCOES.map(o=>`<button class="op" data-k="${o.k}"><big>${o.k}</big><strong>${o.t}</strong><span>${o.d}</span></button>`).join('');
-$$('.op').forEach(b=>b.onclick=()=>{escolha=b.dataset.k;$$('.op').forEach(x=>x.classList.toggle('sel',x===b));$('#votar').disabled=false;bip(330);});
+$$('.op').forEach(b=>b.onclick=()=>{escolha=b.dataset.k;$$('.op').forEach(x=>x.classList.toggle('sel',x===b));$('#votar').disabled=false;});
 $('#votar').onclick=()=>{ if(!escolha)return; urna[escolha]++; try{localStorage.setItem('tdi_urna',JSON.stringify(urna))}catch(e){}
-  renderRes(true); bip(700,.3); escolha=null;$$('.op').forEach(x=>x.classList.remove('sel'));$('#votar').disabled=true; };
+  renderRes(true); escolha=null;$$('.op').forEach(x=>x.classList.remove('sel'));$('#votar').disabled=true; };
 $('#zerar').onclick=()=>{ if(confirm('Zerar todos os votos desta urna?')){urna={A:0,B:0,C:0};try{localStorage.removeItem('tdi_urna')}catch(e){}renderRes(false);} };
 function renderRes(anim){ const T=tot();
   $('#res').innerHTML=T?OPCOES.map(o=>`<div class="rb"><b class="mono">${o.k}</b><div><i data-w="${Math.round(urna[o.k]/T*100)}"></i></div><span class="mono">${urna[o.k]} (${Math.round(urna[o.k]/T*100)}%)</span></div>`).join('')
@@ -411,7 +398,7 @@ function renderRes(anim){ const T=tot();
 /* ATO 6 */
 function veredito(){ $('#vsint').innerHTML='Influenciar não é controlar, e ninguém decide o voto de outra pessoa. Mas quem vive de recomendar produtos mostra, na prática, que a sua palavra pesa. O que o caso coloca em julgamento é negar esse peso só quando o assunto é política. Para Bourdieu, o poder simbólico funciona justamente quando quem o exerce não o reconhece.';
   $('#final').classList.remove('v'); $('#reiniciar').style.display='none'; $('#cort').classList.remove('f');
-  setTimeout(()=>{$('#final').classList.add('v');bip(150,1,.07);},1800);
+  setTimeout(()=>{$('#final').classList.add('v');},1800);
   setTimeout(()=>{$('#reiniciar').style.display='inline-block';},4200); }
 $('#reiniciar').onclick=()=>{ $('#cort').classList.add('f'); setTimeout(()=>{
   ex.clear();seen=[false,false];escolha=null;$('#perg').innerHTML='';$('#aviso').textContent='Assista aos dois materiais para liberar a pergunta';
