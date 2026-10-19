@@ -7,26 +7,24 @@
 <!--
 =====================================================================
  TRIBUNAL DA INFLUÊNCIA — guia rápido de edição
- 1) Coloque este HTML na MESMA pasta que a pasta "midia" (video-*.mp4, print-*.jpg).
- 2) Vídeos/prints: edite o objeto CONFIG (no <script>, mais abaixo).
+ 1) Este HTML fica na MESMA pasta que a pasta "midia".
+ 2) Vídeos/prints: objeto CONFIG (no <script>).
  3) Textos das provas: array PROVAS.   4) Cores: variáveis em :root.
- 5) Transcrição dos vídeos: CONFIG.videos[].trecho — preencha com a fala EXATA.
+ 5) Falas dos vídeos: CONFIG.videos[].trecho (escreva a fala EXATA).
  6) Referências: array REFS.   Atalhos: setas ← → navegam; M liga/desliga som.
 =====================================================================
 -->
 <style>
 :root{
-  --bg:#0b0c0e; --graf:#16181c; --graf2:#1f2227; --txt:#f4f2ee; --mut:#8d9199;
-  --red:#a3141f; --red2:#d1232f; --blue:#7fb2d9; --line:rgba(255,255,255,.12);
+  --bg:#0b0c0e; --graf:#16181c; --graf2:#1f2227; --txt:#f4f2ee; --mut:#a9adb4; --soft:#d4d7dc;
+  --red:#a3141f; --red2:#e0343f; --blue:#8fc0e6; --line:rgba(255,255,255,.14);
   --serif:Georgia,'Times New Roman',serif; --mono:'Courier New',monospace; --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--sans);overflow:hidden}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.07;
-  background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px)}
 button{font:inherit;color:inherit;cursor:pointer;background:none;border:1px solid var(--line)}
 button:focus-visible,video:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-.mono{font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;font-size:clamp(11px,1vw,14px)}
+.mono{font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;font-size:clamp(12px,1vw,14px)}
 .blue{color:var(--blue)} .red{color:var(--red2)}
 /* ---- atos ---- */
 .ato{position:fixed;inset:0 0 56px 0;padding:clamp(18px,4vw,56px);display:none;overflow:auto}
@@ -34,7 +32,7 @@ button:focus-visible,video:focus-visible{outline:2px solid var(--blue);outline-o
 .ato.out{display:block;animation:out .5s forwards}
 @keyframes in{from{opacity:0;transform:scale(1.03);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
 @keyframes out{to{opacity:0;transform:scale(.97);filter:blur(8px)}}
-h1,h2{font-family:var(--serif);font-weight:400;line-height:.95}
+h1,h2{font-family:var(--serif);font-weight:400;line-height:1}
 .btn{padding:14px 28px;border:1px solid var(--red2);color:var(--txt);background:rgba(163,20,31,.15);transition:.25s;letter-spacing:.2em;text-transform:uppercase;font-size:14px}
 .btn:hover:not(:disabled){background:var(--red);transform:translateY(-2px)}
 .btn:disabled{opacity:.3;cursor:not-allowed}
@@ -48,22 +46,24 @@ h1,h2{font-family:var(--serif);font-weight:400;line-height:.95}
 #a1{display:none;place-items:center;text-align:left;background:radial-gradient(ellipse at 70% 30%,#2a0b0e 0,transparent 55%)}
 #a1.on{display:grid}
 #a1 .wrap{max-width:1100px;width:100%}
-#a1 h1{font-size:clamp(48px,11vw,170px);letter-spacing:-.02em}
+#a1 h1{font-size:clamp(48px,11vw,170px);letter-spacing:-.02em;line-height:.95}
 #a1 h1 span{display:inline-block;opacity:0;transform:translateY(60px) rotate(4deg);filter:blur(12px);animation:l .9s forwards}
 @keyframes l{to{opacity:1;transform:none;filter:none}}
 .stamp{display:inline-block;border:3px solid var(--red2);color:var(--red2);padding:6px 14px;transform:rotate(-5deg);font-family:var(--mono);letter-spacing:.2em;animation:st 1s 2.4s both}
 @keyframes st{from{opacity:0;transform:rotate(-5deg) scale(2.4)}to{opacity:1;transform:rotate(-5deg)}}
-.sub{margin:28px 0;font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.2vw,30px);color:var(--mut);opacity:0;animation:l 1s 2.2s forwards}
+.sub{margin:28px 0 14px;font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.4vw,32px);color:var(--soft);opacity:0;animation:l 1s 2.2s forwards}
+.caso{max-width:760px;margin:0 0 30px;font-size:clamp(16px,1.5vw,21px);line-height:1.6;color:var(--soft);opacity:0;animation:l 1s 2.6s forwards}
 /* ---- ATO 2 ---- */
+.intro{max-width:760px;font-size:clamp(16px,1.4vw,20px);line-height:1.6;color:var(--soft);margin:0 0 28px}
 .vids{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,3vw,48px);align-items:start;max-width:1200px;margin:0 auto}
-.vid{border:1px solid var(--line);background:var(--graf);padding:14px;transition:.6s}
+.vid{border:1px solid var(--line);background:var(--graf);padding:16px;transition:.6s}
 .vid:nth-child(2){margin-top:60px}
 .vid video{width:100%;max-height:52vh;background:#000;display:block;object-fit:contain}
-.vid .nm{font-family:var(--serif);font-size:clamp(20px,2.4vw,34px);margin:10px 0 4px}
-.vid p{font-size:clamp(12px,1.1vw,15px);color:var(--mut);line-height:1.5}
+.vid .nm{font-family:var(--serif);font-size:clamp(22px,2.4vw,34px);margin:12px 0 6px;color:var(--txt)}
+.vid p{font-size:clamp(14px,1.2vw,17px);color:var(--soft);line-height:1.6}
 .vid .ph{display:none;padding:30px;border:1px dashed var(--red2);color:var(--red2);text-align:center}
 .vid.seen{border-color:var(--blue)}
-.pergunta{max-width:1000px;margin:40px auto 0;text-align:center;font-family:var(--serif);font-size:clamp(24px,3.6vw,56px);line-height:1.1}
+.pergunta{max-width:1000px;margin:40px auto 0;text-align:center;font-family:var(--serif);font-size:clamp(24px,3.6vw,56px);line-height:1.15}
 .pergunta span{opacity:0;filter:blur(8px);display:inline-block;transition:opacity .8s,filter .8s}
 .pergunta span.v{opacity:1;filter:none}
 /* ---- ATO 3 ---- */
@@ -72,68 +72,77 @@ h1,h2{font-family:var(--serif);font-weight:400;line-height:.95}
  radial-gradient(circle at 30% 20%,#1a1d22,transparent 60%),repeating-linear-gradient(90deg,transparent 0 59px,rgba(127,178,217,.05) 59px 60px),repeating-linear-gradient(0deg,transparent 0 59px,rgba(127,178,217,.05) 59px 60px)}
 .mural svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .mural line{stroke:var(--red2);stroke-width:2;stroke-dasharray:6 6;vector-effect:non-scaling-stroke;opacity:.8}
-.no{position:absolute;width:clamp(150px,19vw,260px);transform:translate(-50%,-50%) rotate(var(--r,0deg));padding:14px;background:var(--graf);border:1px solid var(--line);text-align:left;transition:.5s;box-shadow:0 20px 40px #000a}
+.no{position:absolute;width:clamp(160px,20vw,270px);transform:translate(-50%,-50%) rotate(var(--r,0deg));padding:14px;background:var(--graf);border:1px solid var(--line);text-align:left;transition:.5s;box-shadow:0 20px 40px #000a}
 .no:hover:not(.lock){transform:translate(-50%,-52%) rotate(0) scale(1.06);border-color:var(--blue);z-index:5}
-.no.lock{opacity:.25;filter:grayscale(1) blur(2px);pointer-events:none}
+.no.lock{opacity:.3;filter:grayscale(1) blur(2px);pointer-events:none}
 .no.novo{animation:rev 1s}
 @keyframes rev{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-30deg)}60%{box-shadow:0 0 0 8px var(--red)}}
-.no b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(16px,1.7vw,24px);margin-top:6px}
+.no b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(17px,1.8vw,25px);margin:6px 0 8px}
 .st{font-size:11px;padding:2px 8px;border:1px solid var(--red2);color:var(--red2)} .no.ex .st{border-color:var(--blue);color:var(--blue)}
-.hud{position:absolute;left:clamp(14px,3vw,40px);top:clamp(14px,3vw,36px);z-index:3}
+.hud{position:absolute;left:clamp(14px,3vw,40px);top:clamp(14px,3vw,36px);z-index:3;max-width:min(520px,60vw)}
 .hud h2{font-size:clamp(28px,4vw,60px)}
+.hud .dica{margin-top:10px;font-size:clamp(14px,1.2vw,17px);line-height:1.5;color:var(--soft)}
 .tl{position:absolute;left:clamp(14px,3vw,40px);right:clamp(14px,3vw,40px);bottom:14px;display:flex;align-items:center;z-index:3}
 .tl i{flex:1;height:2px;background:var(--graf2);position:relative}
 .tl i::after{content:"";position:absolute;inset:0;background:var(--red2);transform:scaleX(0);transform-origin:left;transition:1s}
 .tl i.f::after{transform:none}
 .tl u{width:14px;height:14px;border:2px solid var(--mut);border-radius:50%;background:var(--bg);text-decoration:none}
 .tl u.f{border-color:var(--blue);background:var(--blue)}
-#gaveta{position:fixed;top:0;right:0;bottom:56px;width:min(560px,100%);background:#101215f2;border-left:2px solid var(--red);z-index:40;padding:clamp(18px,2.5vw,34px);overflow:auto;transform:translateX(105%);transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+#gaveta{position:fixed;top:0;right:0;bottom:56px;width:min(580px,100%);background:#101215f8;border-left:2px solid var(--red);z-index:40;padding:clamp(18px,2.5vw,34px);overflow:auto;transform:translateX(105%);transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 #gaveta.on{transform:none}
 #gaveta h3{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3vw,42px);margin:8px 0 14px}
-#gaveta p{line-height:1.6;margin-bottom:12px;font-size:clamp(14px,1.25vw,18px)}
-.tg{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;margin:0 6px 8px 0;border:1px solid}
+#gaveta p{line-height:1.7;margin-bottom:14px;font-size:clamp(16px,1.4vw,20px);color:var(--soft)}
+#gaveta p b{color:var(--txt)}
+#gaveta p.mono{color:var(--blue)}
+.tg{display:inline-block;font-family:var(--mono);font-size:12px;padding:3px 8px;margin:0 6px 10px 0;border:1px solid}
 .tg.f{color:var(--blue)} .tg.h{color:#e0b44a} .tg.i{color:var(--red2)}
 .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
 .gal img{width:100%;aspect-ratio:9/16;object-fit:cover;object-position:top;cursor:zoom-in;border:1px solid var(--line);transition:.3s}
 .gal img:hover{border-color:var(--blue)}
+#gaveta .legs{font-size:14px;line-height:1.6;color:var(--mut);letter-spacing:0;text-transform:none;font-family:var(--sans)}
 #zoom{position:fixed;inset:0;z-index:80;background:#000e;display:none;place-items:center;cursor:zoom-out}
 #zoom.on{display:grid} #zoom img{max-height:94vh;max-width:94vw}
 /* ---- ATO 4 ---- */
 #a4{background:linear-gradient(120deg,#0b0c0e 40%,#0d1620)}
-.teo{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(18px,4vw,60px);max-width:1250px;margin:0 auto}
-.teo h2{font-size:clamp(34px,5.5vw,84px)}
-.lentes{display:flex;gap:8px;margin:18px 0}
-.lentes button{padding:10px 16px;font-size:13px}.lentes button.on{background:var(--blue);color:#000;border-color:var(--blue)}
-.dossie{background:var(--graf);border:1px solid var(--line);padding:clamp(16px,2vw,28px);font-family:var(--mono);font-size:clamp(12px,1.15vw,16px);line-height:1.65}
-.dossie p{margin-bottom:12px;font-family:var(--sans)}
-.nota{display:block;border-left:3px solid var(--blue);padding-left:12px;margin:10px 0;opacity:.2;filter:blur(3px);transition:.7s;color:var(--blue)}
-.nota.v{opacity:1;filter:none}
-details{margin-top:14px;font-size:13px;color:var(--mut)} summary{cursor:pointer;color:var(--blue)}
-details li{margin:8px 0 0 18px;line-height:1.5}
+.teo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,4vw,60px);max-width:1250px;margin:0 auto}
+.teo h2{font-size:clamp(34px,5vw,76px)}
+.teo .intro{margin-top:14px}
+.lentes{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap}
+.lentes button{padding:12px 16px;font-size:14px}.lentes button.on{background:var(--blue);color:#000;border-color:var(--blue)}
+.dossie{background:var(--graf);border:1px solid var(--line);padding:clamp(18px,2.2vw,32px);font-family:var(--sans);font-size:clamp(16px,1.35vw,19px);line-height:1.7;color:var(--soft)}
+.dossie p{margin-bottom:14px}
+.dossie .tit{font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--blue);margin:18px 0 10px}
+.dossie .tit:first-child{margin-top:0}
+.dossie b{color:var(--txt)}
+.nota{display:block;border-left:3px solid var(--blue);padding-left:14px;margin:12px 0;opacity:.15;transition:opacity .7s;color:var(--txt)}
+.nota.v{opacity:1}
+details{margin-top:16px;font-size:15px;color:var(--soft)} summary{cursor:pointer;color:var(--blue)}
+details li{margin:8px 0 0 18px;line-height:1.6}
 /* ---- ATO 5 ---- */
 .jur{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,28px);max-width:1250px;margin:26px auto}
 .op{padding:clamp(16px,2vw,28px);background:var(--graf);border:1px solid var(--line);text-align:left;min-height:220px;transition:.4s}
 .op:nth-child(2){margin-top:34px}
 .op:hover{border-color:var(--red2);transform:translateY(-6px)}
 .op.sel{background:var(--red);border-color:var(--red2);transform:translateY(-10px) scale(1.02)}
-.op big{display:block;font-family:var(--serif);font-size:clamp(46px,6vw,90px);opacity:.35}
-.op strong{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(18px,2vw,28px);margin:6px 0}
-.op span{font-size:clamp(12px,1.1vw,16px);line-height:1.5;color:#d6d6d6}
+.op big{display:block;font-family:var(--serif);font-size:clamp(46px,6vw,90px);opacity:.35;line-height:1}
+.op strong{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(20px,2.1vw,30px);margin:6px 0 10px}
+.op span{font-size:clamp(15px,1.3vw,18px);line-height:1.55;color:#e4e4e4}
 .res{max-width:1250px;margin:0 auto;display:grid;gap:10px}
 .rb{display:grid;grid-template-columns:40px 1fr 90px;align-items:center;gap:12px}
 .rb div{height:26px;background:var(--graf2)} .rb div i{display:block;height:100%;background:var(--red2);width:0;transition:width 1.6s cubic-bezier(.2,.8,.2,1)}
+#sint{max-width:1000px;margin:20px auto;line-height:1.7;color:var(--soft);font-size:clamp(15px,1.3vw,18px)}
 /* ---- ATO 6 ---- */
 #a6{text-align:center;display:none;place-items:center;background:radial-gradient(ellipse at 50% 0,#3a0c11,transparent 60%)}
 #a6.on{display:grid}
 #a6 h2{font-size:clamp(30px,5vw,76px);max-width:1000px;margin:0 auto}
-#a6 p.s{max-width:760px;margin:20px auto;line-height:1.6;color:#cfcfcf;font-size:clamp(14px,1.5vw,20px)}
+#a6 p.s{max-width:780px;margin:22px auto;line-height:1.7;color:var(--soft);font-size:clamp(16px,1.6vw,22px)}
 #final{font-family:var(--serif);font-style:italic;font-size:clamp(22px,3.4vw,50px);margin:26px auto;max-width:900px;opacity:0;transition:opacity 2s}
 #final.v{opacity:1}
 #cort{position:fixed;inset:0;background:#000;z-index:70;pointer-events:none;transform:scaleY(0);transform-origin:top;transition:transform 1.4s}
 #cort.f{transform:none}
 #refs{position:fixed;inset:0 0 56px 0;z-index:45;background:#0b0c0efa;padding:clamp(18px,4vw,56px);overflow:auto;display:none}
-#refs.on{display:block} #refs li{margin:14px 0 0 20px;line-height:1.5;max-width:900px}
-@media(max-width:800px){.vids,.teo,.jur{grid-template-columns:1fr}.vid:nth-child(2),.op:nth-child(2){margin-top:0}}
+#refs.on{display:block} #refs li{margin:14px 0 0 20px;line-height:1.6;max-width:900px;font-size:17px;color:var(--soft)}
+@media(max-width:800px){.vids,.teo,.jur{grid-template-columns:1fr}.vid:nth-child(2),.op:nth-child(2){margin-top:0}.hud{max-width:90vw}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -146,6 +155,7 @@ details li{margin:8px 0 0 18px;line-height:1.5}
   <p class="mono blue" style="margin:8px 0 22px">Processo nº TDI-0000/FICT · Vara Imaginária de Posicionamento Digital</p>
   <h1 id="titulo" aria-label="Tribunal da Influência"></h1>
   <p class="sub">O poder de influenciar está em julgamento.</p>
+  <p class="caso"><b>O caso:</b> influenciadoras que vivem de publicidade foram cobradas por um posicionamento político e, segundo a tese do grupo, responderam que não têm poder de influenciar. Mas, se a influência serve para vender produtos, ela some quando o assunto é política? O tribunal vai analisar as provas.</p>
   <span class="stamp">CASO ABERTO</span>
   <div style="margin-top:44px"><button class="btn" id="iniciar">Iniciar julgamento</button></div>
  </div>
@@ -154,7 +164,8 @@ details li{margin:8px 0 0 18px;line-height:1.5}
 <!-- ============ ATO 2 — A DECLARAÇÃO ============ -->
 <section class="ato" id="a2">
  <p class="mono red">Ato II · Material de referência</p>
- <h2 style="font-size:clamp(34px,5vw,72px);margin:8px 0 26px">A declaração</h2>
+ <h2 style="font-size:clamp(34px,5vw,72px);margin:8px 0 16px">A declaração</h2>
+ <p class="intro">Assista aos dois vídeos até quase o final. Cada um é de uma pessoa diferente, então vale analisar separadamente.</p>
  <div class="vids" id="vids"></div>
  <p class="pergunta" id="perg"></p>
  <p class="mono" id="aviso" style="text-align:center;margin-top:20px;color:var(--mut)">Assista aos dois materiais para liberar a pergunta</p>
@@ -164,6 +175,7 @@ details li{margin:8px 0 0 18px;line-height:1.5}
 <section class="ato" id="a3">
  <div class="mural" id="mural"><svg viewBox="0 0 100 100" preserveAspectRatio="none" id="fios"></svg></div>
  <div class="hud"><p class="mono red">Ato III · Mesa de evidências</p><h2>A investigação</h2>
+  <p class="dica">Abra cada prova, leia e clique em “Marcar como examinada”. As próximas vão sendo liberadas.</p>
   <p class="mono blue" style="margin-top:10px" id="cont">0 / 5 examinadas</p></div>
  <div class="tl" id="tl"></div>
  <aside id="gaveta" aria-live="polite"></aside>
@@ -175,7 +187,7 @@ details li{margin:8px 0 0 18px;line-height:1.5}
   <div>
    <p class="mono blue">Ato IV · Nova perspectiva anexada ao processo</p>
    <h2 style="margin:10px 0">A teoria por trás do caso</h2>
-   <p style="color:var(--mut);line-height:1.6;max-width:520px">Autos suplementares: conceitos acadêmicos usados como <em>ferramenta de leitura</em>. Eles não afirmam que os autores estudaram este caso. Escolha uma lente e veja o que muda nas provas.</p>
+   <p class="intro">Aqui entram dois autores estudados na matéria. Eles não analisaram este caso: suas ideias servem como <em>lentes</em> para ler as provas. Escolha uma lente e veja o que muda.</p>
    <div class="lentes"><button data-l="b" class="on">Bourdieu · poder simbólico</button><button data-l="m">McLuhan · o meio é a mensagem</button></div>
    <button class="btn" style="padding:10px 18px;font-size:12px" id="vrefs">Referências</button>
   </div>
@@ -187,11 +199,12 @@ details li{margin:8px 0 0 18px;line-height:1.5}
 <section class="ato" id="a5">
  <p class="mono red">Ato V · O júri é a turma</p>
  <h2 style="font-size:clamp(34px,5vw,72px);margin:8px 0">Qual é o seu voto?</h2>
+ <p class="intro">Escolha a opção que mais combina com a sua leitura das provas e clique em “Registrar voto”.</p>
  <div class="jur" id="jur"></div>
  <div style="text-align:center"><button class="btn" id="votar" disabled>Registrar voto</button>
   <button class="mono" id="zerar" style="padding:10px 14px;margin-left:10px">zerar urna</button></div>
  <div class="res" id="res" style="margin-top:26px"></div>
- <p id="sint" style="max-width:1000px;margin:20px auto;line-height:1.6;color:#cfcfcf"></p>
+ <p id="sint"></p>
 </section>
 
 <!-- ============ ATO 6 — VEREDITO ============ -->
@@ -225,13 +238,13 @@ details li{margin:8px 0 0 18px;line-height:1.5}
 const CONFIG = {
   videos: [
     { src:"midia/video-alexia.mp4", quem:"Alexia Del Papa",
-      contexto:"Stories gravados em vídeo, exibidos na tela de um celular. No início aparece um post de terceiros (@lizzieyozng) que a descreve como influenciadora que “acha que internet não influencia”. Esse texto é a leitura de outra pessoa, não uma fala dela.",
-      trecho:"[EDITAR: transcreva aqui, entre aspas, o trecho exato dito por Alexia. A IA não conseguiu ouvir o áudio.]" },
+      contexto:"Stories gravados em vídeo, exibidos na tela de um celular. No começo aparece um post de outra pessoa (@lizzieyozng) dizendo que ela “acha que internet não influencia”. Atenção: essa frase é de terceiros, não é fala da Alexia.",
+      trecho:"[EDITAR: escreva aqui, entre aspas, a fala exata da Alexia.]" },
     { src:"midia/video-karoline.mp4", quem:"Karoline Lima",
-      contexto:"Vídeo vertical com marca d’água do TikTok (repostado por outro perfil) e legenda na tela contendo “sobre política”. [CONFIRMAR: identificação da pessoa, data e contexto original.]",
-      trecho:"[EDITAR: transcreva aqui, entre aspas, o trecho exato dito no vídeo.]" }
+      contexto:"Vídeo vertical com marca d’água do TikTok (repostado por outro perfil) e legenda na tela com “sobre política”. [CONFIRMAR: data e contexto original do vídeo.]",
+      trecho:"[EDITAR: escreva aqui, entre aspas, a fala exata do vídeo.]" }
   ],
-      prints: [
+  prints: [ // ordem = galeria da Prova 02
     { src:"midia/print-1-karoline.jpg", quem:"Karoline Lima", leg:"Publicação com @nestlemucilon, marcada #publicidade (23 de setembro)." },
     { src:"midia/print-2-karoline.jpg", quem:"Karoline Lima", leg:"Publicação com @haskelloficial, marcada #publi (25 de setembro)." },
     { src:"midia/print-1-alexia.jpg",   quem:"Alexia Del Papa", leg:"Publicação com @bershka, marcada *publicidade (29 de agosto)." },
@@ -240,31 +253,42 @@ const CONFIG = {
 };
 const PERGUNTA = ["Se a sua influência é suficiente para vender um produto,", " por que ela seria irrelevante em outros contextos?"];
 
-/* PROVAS — textos de cada evidência. tipo: f=fato observado, h=hipótese, i=interpretação */
+/* PROVAS — f=fato observado, h=hipótese, i=interpretação */
 const PROVAS = [
- {n:"01",t:"A profissão",x:22,y:34,r:-3,tags:[["f","Fato: contexto profissional"],["i","Interpretação"]],
-  p:["O trabalho de um influenciador depende, em alguma medida, de capacidade de despertar atenção, interesse, identificação ou confiança.","Marcas contratam esse perfil porque a presença dele diante de uma audiência é parte do valor oferecido. Influência, aqui, é <b>insumo profissional</b>, não acidente."]},
- {n:"02",t:"A publicidade",x:50,y:24,r:2,galeria:true,tags:[["f","Fato: prints anexados"],["h","Hipótese: efeito sobre consumo"]],
-  p:["Os quatro prints mostram publicações sinalizadas como publicidade, com marcas identificadas. Toque nas miniaturas para ampliar.","<b>Cuidado:</b> os prints provam que existe atividade comercial. Eles <u>não</u> provam resultado de vendas nem sucesso de campanha."]},
+ {n:"01",t:"A profissão",x:22,y:34,r:-3,tags:[["f","Fato: como funciona o trabalho"],["i","Interpretação"]],
+  p:["Influenciador vive de atenção e confiança. As marcas pagam porque a pessoa tem uma audiência que presta atenção no que ela diz.",
+     "Ou seja: a <b>capacidade de influenciar é justamente o que está sendo vendido</b>. Não é acidente, é o trabalho."]},
+ {n:"02",t:"A publicidade",x:50,y:24,r:2,galeria:true,tags:[["f","Fato: prints anexados"],["h","Hipótese: efeito nas vendas"]],
+  p:["Os quatro prints mostram posts marcados como publicidade, com marcas identificadas. Toque nas imagens para ampliar.",
+     "<b>Cuidado:</b> os prints provam que elas fazem publi. Eles <u>não</u> provam quantas vendas isso gerou."]},
  {n:"03",t:"A credibilidade",x:78,y:36,r:3,tags:[["i","Interpretação teórica"]],
-  p:["A relação com a audiência pode dar peso às recomendações: familiaridade (acompanhar o cotidiano), identificação, confiança acumulada e percepção de autenticidade.","Uma recomendação soa diferente quando vem de “alguém que eu conheço” do que de um anúncio anônimo."]},
- {n:"04",t:"A declaração em análise",x:33,y:68,r:-2,video:true,tags:[["f","Fato: vídeos anexados"],["i","Interpretação"]],
-  p:["Retome os dois materiais do Ato II. Cada um pertence a uma pessoa diferente e <b>não deve ser lido como se fossem a mesma declaração</b>.","Confronte o que foi dito com a atividade comercial da Prova 02 <b>apenas</b> no que a transcrição sustentar. Se o trecho não sustentar contradição, a investigação deve admitir isso."]},
- {n:"05",t:"Influenciar não é controlar",x:68,y:70,r:2,tags:[["f","Fato conceitual"],["i","Contraponto"]],
-  p:["Ter capacidade de influenciar não é decidir pelo outro. Influenciar uma compra e influenciar um voto são situações diferentes, com riscos, motivações e custos distintos.","A existência de influência comercial <b>não prova automaticamente</b> o mesmo efeito em uma recomendação política. Esta prova mantém o julgamento honesto."]}
+  p:["Por que a indicação de um influenciador funciona? Porque a audiência acompanha o dia a dia dele, se identifica e confia.",
+     "Uma recomendação de “alguém que eu conheço” pesa mais do que o anúncio de uma empresa que ninguém conhece."]},
+ {n:"04",t:"A declaração em análise",x:33,y:68,r:-2,video:true,tags:[["f","Fato: vídeos anexados"],["i","Interpretação: possível contradição"]],
+  p:["Este é o centro do caso. Perfis que vivem de publicidade (Prova 02) foram cobrados por um posicionamento político e, segundo a tese do grupo, responderam que não têm poder de influenciar.",
+     "Compare com as Provas 01 a 03: se a influência é forte o bastante para vender, por que seria zero aqui?",
+     "<b>Use só o que a transcrição confirmar</b> e analise cada pessoa separadamente."]},
+ {n:"05",t:"A defesa: influenciar não é controlar",x:68,y:70,r:2,tags:[["f","Fato conceitual"],["i","Contraponto e réplica"]],
+  p:["A defesa tem um bom argumento: <b>influenciar uma compra não é decidir um voto</b>. Ninguém controla a escolha do outro, e política tem riscos diferentes de publicidade.",
+     "Mas a contradição não depende de controle. Ela está em dizer “eu tenho influência” quando vende e “eu não tenho” quando o assunto é política.",
+     "A defesa explica o <u>tamanho</u> do efeito, mas não explica a <u>negação</u> do poder."]}
 ];
 const LIGA=[[0,1],[1,2],[0,3],[2,3],[3,4]]; // ligações visuais entre provas
 
 /* TEORIA — textos das lentes (sem citações literais) */
 const TEORIA={
  b:{t:"Pierre Bourdieu (1930–2002), sociólogo francês",
-    p:["<b>Poder simbólico</b>: poder que funciona pelo reconhecimento. Ele só opera porque outras pessoas atribuem legitimidade a quem fala, muitas vezes sem perceber que há poder em jogo.",
-       "No ambiente digital, visibilidade, posição ocupada e confiança atribuída ajudam a construir essa legitimidade."],
-    n:[["Prova 01","a audiência reconhece o influenciador; é isso que a marca contrata."],["Prova 03","credibilidade é capital simbólico acumulado."],["Prova 05","reconhecimento não é comando: legitimidade num campo não se transfere sozinha para outro."]]},
+    p:["<b>Poder simbólico</b> é um poder que só funciona porque as pessoas o reconhecem. Quem tem esse poder muitas vezes nem percebe, e quem o aceita também não.",
+       "Exemplo: a audiência confia no influenciador, e é essa confiança que dá peso ao que ele fala. Na internet, visibilidade e confiança viram esse tipo de poder."],
+    n:[["Prova 01","a audiência reconhece o influenciador, e é esse reconhecimento que a marca paga."],
+       ["Prova 03","a confiança acumulada ao longo do tempo é o que dá peso às recomendações."],
+       ["Prova 05","o poder simbólico funciona melhor quando não é percebido. Dizer “eu não tenho poder” pode fazer parte do próprio jeito como ele opera."]]},
  m:{t:"Marshall McLuhan (1911–1980), teórico da comunicação canadense",
-    p:["<b>“O meio é a mensagem”</b> (ideia central do autor): o meio e o formato participam do sentido do que é dito.",
-       "A mesma frase não ocupa a mesma posição se dita por alguém anônimo ou por quem tem audiência consolidada, em vídeo vertical, nas redes."],
-    n:[["Prova 02","o formato (vídeo íntimo, rotina) é parte da mensagem publicitária."],["Prova 04","o vídeo é um meio: tom, plataforma e alcance moldam como a declaração é recebida."],["Prova 03","a proximidade do formato alimenta a sensação de autenticidade."]]}
+    p:["<b>“O meio é a mensagem”</b> (ideia central do autor): o formato em que algo é dito muda o que aquilo significa.",
+       "Exemplo: a mesma frase tem outro peso quando dita por um anônimo ou por alguém com muitos seguidores, num vídeo curto e próximo, feito para o celular."],
+    n:[["Prova 02","o formato do post (vídeo caseiro, rotina do dia) faz parte do convencimento."],
+       ["Prova 03","a proximidade do formato cria a sensação de que a pessoa é autêntica."],
+       ["Prova 04","o vídeo é o meio: tom, plataforma e alcance mudam como a fala é recebida, mesmo quando a pessoa diz que não influencia."]]}
 };
 const REFS=[
  "BOURDIEU, Pierre. <i>O poder simbólico</i>. Tradução de Fernando Tomaz. Rio de Janeiro: Bertrand Brasil. [CONFERIR edição/ano na sua biblioteca.]",
@@ -273,9 +297,9 @@ const REFS=[
  "[ADICIONAR outras referências da disciplina Posicionamento em Ambiente Digital.]"
 ];
 const OPCOES=[
- {k:"A",t:"Existe uma contradição",d:"Há tensão entre trabalhar comercialmente com influência e minimizar a própria capacidade de influenciar.",s:"Argumento: se a influência sustenta o negócio, negá-la em outro contexto soa seletivo."},
- {k:"B",t:"Existe uma diferença legítima",d:"Influenciar uma compra e influenciar um voto são situações distintas; uma capacidade não determina a outra.",s:"Argumento: contextos têm lógicas próprias, e ninguém controla decisões alheias."},
- {k:"C",t:"As duas coexistem",d:"Pode haver capacidade de influência sem controle das decisões individuais, e ainda assim tensão na forma como ela é descrita.",s:"Argumento: reconhecer limites da influência não exige negar que ela exista."}
+ {k:"A",t:"Existe contradição",d:"Elas usam o poder de influenciar para vender e negam esse poder quando o assunto é política.",s:"Argumento: se a influência sustenta o negócio, negá-la só em um assunto parece conveniente."},
+ {k:"B",t:"Existe diferença legítima",d:"Influenciar uma compra e influenciar um voto são coisas diferentes. Ter uma capacidade não significa ter a outra.",s:"Argumento: cada contexto tem sua lógica, e ninguém controla a decisão do outro."},
+ {k:"C",t:"Os dois lados têm razão",d:"Elas não controlam ninguém, mas ainda assim há uma tensão em dizer que não têm influência.",s:"Argumento: reconhecer os limites da influência não exige negá-la por completo."}
 ];
 
 /* =====================================================================
@@ -293,7 +317,7 @@ $('#dots').innerHTML=atos.map(()=>'<i></i>').join('');
 function liberado(){ // regras para avançar
   if(cur===1) return seen[0]&&seen[1];
   if(cur===2) return ex.size===5;
-  if(cur===4) return localStorage_ok()&&tot()>0;
+  if(cur===4) return tot()>0;
   return true; }
 function go(n){
   if(n<0||n>5||n===cur&&atos[n].classList.contains('on'))return;
@@ -319,9 +343,9 @@ $('#iniciar').onclick=()=>go(1);
 $('#vids').innerHTML=CONFIG.videos.map((v,i)=>`<div class="vid" id="v${i}">
   <p class="mono blue">Material ${i+1}</p>
   <video controls playsinline preload="metadata" src="${v.src}"></video>
-  <div class="ph">Arquivo não encontrado: ${v.src}<br>Coloque o vídeo na pasta indicada em CONFIG.</div>
+  <div class="ph">Não foi possível carregar o vídeo: ${v.src}<br>Confira se o arquivo está na pasta indicada em CONFIG.</div>
   <p class="nm">${v.quem}</p><p>${v.contexto}</p>
-  <p style="margin-top:8px;color:var(--txt);font-family:var(--serif);font-style:italic">${v.trecho}</p></div>`).join('');
+  <p style="margin-top:10px;color:var(--txt);font-family:var(--serif);font-style:italic">${v.trecho}</p></div>`).join('');
 $$('.vid video').forEach((vd,i)=>{
   vd.addEventListener('error',()=>{vd.style.display='none';vd.nextElementSibling.style.display='block';seen[i]=true;check();});
   vd.addEventListener('timeupdate',()=>{ if(vd.duration&&vd.currentTime/vd.duration>.8&&!seen[i]){seen[i]=true;$('#v'+i).classList.add('seen');bip(520);check();} });
@@ -350,8 +374,8 @@ const revelada=i=>i===0||ex.has(i-1)||ex.has(i); // revela em sequência
 function abrir(i){ const p=PROVAS[i], g=$('#gaveta'); bip(260);
   let extra='';
   if(p.galeria) extra=`<div class="gal">${CONFIG.prints.map((x,k)=>`<img src="${x.src}" data-k="${k}" alt="${x.quem}: ${x.leg}" loading="lazy">`).join('')}</div>
-   <p class="mono" style="color:var(--mut)">${CONFIG.prints.map(x=>x.quem.split(' ')[0]+': '+x.leg).join('<br>')}</p>`;
-  if(p.video) extra=`<p class="mono blue">Alexia Del Papa — trecho</p><p>${CONFIG.videos[0].trecho}</p><p class="mono blue">Karoline Lima — trecho</p><p>${CONFIG.videos[1].trecho}</p>`;
+   <p class="legs">${CONFIG.prints.map(x=>'<b>'+x.quem.split(' ')[0]+':</b> '+x.leg).join('<br>')}</p>`;
+  if(p.video) extra=`<p class="mono">Alexia Del Papa: trecho</p><p>${CONFIG.videos[0].trecho}</p><p class="mono">Karoline Lima: trecho</p><p>${CONFIG.videos[1].trecho}</p>`;
   g.innerHTML=`<button class="mono" onclick="document.getElementById('gaveta').classList.remove('on')">fechar ✕</button>
    <p class="mono red" style="margin-top:14px">Prova ${p.n}</p><h3>${p.t}</h3>${p.tags.map(t=>`<span class="tg ${t[0]}">${t[1]}</span>`).join('')}
    ${p.p.map(x=>`<p>${x}</p>`).join('')}${extra}
@@ -363,17 +387,16 @@ $('#zoom').onclick=()=>$('#zoom').classList.remove('on');
 
 /* ATO 4 */
 function teoria(){ const T=TEORIA[lente];
-  $('#dos').innerHTML=`<p class="blue">// ARQUIVO TEÓRICO</p><p><b>${T.t}</b></p>${T.p.map(x=>`<p>${x}</p>`).join('')}
-   <p class="blue">// ANOTAÇÕES LIGADAS ÀS PROVAS</p>${T.n.map(n=>`<span class="nota"><b>${n[0]}:</b> ${n[1]}</span>`).join('')}
+  $('#dos').innerHTML=`<p class="tit">Sobre o autor</p><p><b>${T.t}</b></p>${T.p.map(x=>`<p>${x}</p>`).join('')}
+   <p class="tit">O que isso muda nas provas</p>${T.n.map(n=>`<span class="nota"><b>${n[0]}:</b> ${n[1]}</span>`).join('')}
    <details><summary>O que a teoria não diz</summary><ul><li>Não afirma que o autor analisou estas influenciadoras.</li><li>Não prova que houve contradição: oferece uma forma de interpretar.</li></ul></details>`;
-  $$('.nota').forEach((n,i)=>setTimeout(()=>n.classList.add('v'),500+i*700)); }
+  $$('.nota').forEach((n,i)=>setTimeout(()=>n.classList.add('v'),400+i*600)); }
 $$('.lentes button').forEach(b=>b.onclick=()=>{lente=b.dataset.l;$$('.lentes button').forEach(x=>x.classList.toggle('on',x===b));teoria();bip(350);});
 teoria();
 $('#reflist').innerHTML=REFS.map(r=>`<li>${r}</li>`).join('');
 const verRefs=()=>$('#refs').classList.add('on'); $('#vrefs').onclick=verRefs; $('#rf').onclick=verRefs; $('#fechar').onclick=()=>$('#refs').classList.remove('on');
 
-/* ATO 5 — votação real, salva no navegador (vários votos no mesmo aparelho) */
-function localStorage_ok(){try{localStorage.setItem('t','1');return true}catch(e){return true}}
+/* ATO 5 — votação salva no navegador (vários votos no mesmo aparelho) */
 let urna={A:0,B:0,C:0}; try{urna=JSON.parse(localStorage.getItem('tdi_urna'))||urna}catch(e){}
 const tot=()=>urna.A+urna.B+urna.C;
 $('#jur').innerHTML=OPCOES.map(o=>`<button class="op" data-k="${o.k}"><big>${o.k}</big><strong>${o.t}</strong><span>${o.d}</span></button>`).join('');
@@ -385,10 +408,10 @@ function renderRes(anim){ const T=tot();
   $('#res').innerHTML=T?OPCOES.map(o=>`<div class="rb"><b class="mono">${o.k}</b><div><i data-w="${Math.round(urna[o.k]/T*100)}"></i></div><span class="mono">${urna[o.k]} (${Math.round(urna[o.k]/T*100)}%)</span></div>`).join('')
    +`<p class="mono" style="color:var(--mut)">${T} voto(s) registrados neste aparelho</p>`:'<p class="mono" style="color:var(--mut)">Nenhum voto registrado ainda. Cada clique em “Registrar voto” conta um jurado.</p>';
   setTimeout(()=>$$('.rb i').forEach(i=>i.style.width=i.dataset.w+'%'),60);
-  $('#sint').innerHTML=T?OPCOES.map(o=>`<b>${o.k}.</b> ${o.s}`).join('<br>')+'<br><br><i>Nenhuma opção é declarada “a correta”: o objetivo é abrir a discussão.</i>':''; }
+  $('#sint').innerHTML=T?OPCOES.map(o=>`<b>${o.k}.</b> ${o.s}`).join('<br>')+'<br><br><i>Nenhuma opção é a “certa”: o objetivo é abrir a discussão.</i>':''; }
 
 /* ATO 6 */
-function veredito(){ $('#vsint').innerHTML='Influenciar não é controlar. Influência comercial e influência política não são a mesma coisa. Mas as provas, a lente de Bourdieu e McLuhan e o debate do júri indicam que reconhecimento, visibilidade e confiança são recursos reais, e a pergunta é como cada pessoa descreve e usa esse recurso.';
+function veredito(){ $('#vsint').innerHTML='Influenciar não é controlar, e ninguém decide o voto de outra pessoa. Mas quem vive de recomendar produtos mostra, na prática, que a sua palavra pesa. O que o caso coloca em julgamento é negar esse peso só quando o assunto é política. Para Bourdieu, o poder simbólico funciona justamente quando quem o exerce não o reconhece.';
   $('#final').classList.remove('v'); $('#reiniciar').style.display='none'; $('#cort').classList.remove('f');
   setTimeout(()=>{$('#final').classList.add('v');bip(150,1,.07);},1800);
   setTimeout(()=>{$('#reiniciar').style.display='inline-block';},4200); }
